@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css';
 import Grid from './components/Grid.js'
 
 function App() {
   const gridSize = 10
   const [gridData, setGridData] = useState(generateGridData())
+  const [lastClickedCell, setClickedCell] = useState()
+
+  //UseEffect for changing lastClickedCell
+  useEffect(()=>{
+    console.log(lastClickedCell)
+  }, [lastClickedCell])
 
   function generateGridData(){
     var output = []
@@ -18,19 +24,20 @@ function App() {
           'f': null,
           'g': null,
           'h': null,
-          'parent': null
+          'parent': null,
+          'state' : "CLEAR"
         })
       }
     }
     return output
   }
 
-
   return (
     <div className="App">
-        <Grid
-          gridData={gridData}
-        ></Grid>
+      <Grid
+        gridData={gridData}
+        setClicked={setClickedCell}
+      />
     </div>
   );
 }

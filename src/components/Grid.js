@@ -1,8 +1,8 @@
 import React from 'react'
 import Cell from "./Cell.js"
-import {isUuid, uuid} from 'uuidv4'
+import {uuid} from 'uuidv4'
 
-export default function Grid({gridData}) {
+export default function Grid({gridData, setClicked}) {
     var gridSize = gridData.length
     var cells = generateCells()
 
@@ -16,6 +16,7 @@ export default function Grid({gridData}) {
                         x = {j}
                         y = {i}
                         key = {uuid()}
+                        setClicked = {setClicked}
                     ></Cell>
                 )
             }
