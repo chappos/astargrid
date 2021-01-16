@@ -24,3 +24,13 @@
 .Cell:hover {
   background-color: rgba(112,128,144, 0.9)
 }
+
+.OptionBar {
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  transform: translate(-50%, -15%);
+  column-count: 4;
+  column-gap: none;
+  display: flex
+}

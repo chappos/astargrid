@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import './App.css';
 import Grid from './components/Grid.js'
+import OptionBar from './components/OptionBar.js'
 
 function App() {
   const gridSize = 10
+  const placements = {
+    START: 'START',
+    END: 'END',
+    CLEAR: 'CLEAR',
+    BLOCKED: 'BLOCKED'
+  }
+
+  //Set up useStates
   const [gridData, setGridData] = useState(generateGridData())
   const [lastClickedCell, setClickedCell] = useState()
+  const [currentPlacement, setCurrentPlacement] = useState(placements.START)
 
-  //UseEffect for changing lastClickedCell
+  //useEffect for changing lastClickedCell
   useEffect(()=>{
     console.log(lastClickedCell)
   }, [lastClickedCell])
 
+  //Generates a "blank" grid dataset
   function generateGridData(){
     var output = []
     for(var i = 0; i < gridSize; i++){
@@ -25,7 +36,7 @@ function App() {
           'g': null,
           'h': null,
           'parent': null,
-          'state' : "CLEAR"
+          'state' : placements.CLEAR
         })
       }
     }
@@ -34,6 +45,10 @@ function App() {
 
   return (
     <div className="App">
+      <OptionBar
+        placements={placements}
+        setCurrentPlacement={setCurrentPlacement}
+      />
       <Grid
         gridData={gridData}
         setClicked={setClickedCell}
