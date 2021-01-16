@@ -1,23 +1,36 @@
-import logo from './logo.svg';
+import React, { useState } from 'react'
 import './App.css';
+import Grid from './components/Grid.js'
 
 function App() {
+  const gridSize = 10
+  const [gridData, setGridData] = useState(generateGridData())
+
+  function generateGridData(){
+    var output = []
+    for(var i = 0; i < gridSize; i++){
+      var row = []
+      output.push(row)
+      for(var j = 0; j < gridSize; j++){
+        output[i].push({
+          'x': i,
+          'y': j,
+          'f': null,
+          'g': null,
+          'h': null,
+          'parent': null
+        })
+      }
+    }
+    return output
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Grid
+          gridData={gridData}
+        ></Grid>
     </div>
   );
 }
