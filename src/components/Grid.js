@@ -17,6 +17,7 @@ export default function Grid({gridData, setClicked}) {
                         y = {i}
                         key = {uuid()}
                         setClicked = {setClicked}
+                        state = {gridData[j][i].state}
                     ></Cell>
                 )
             }

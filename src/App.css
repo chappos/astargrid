@@ -34,3 +34,11 @@
   column-gap: none;
   display: flex
 }
+
+.Cell.START { 
+  background-color: green
+}
+
+.Cell.END { 
+  background-color: red
+}
