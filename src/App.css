@@ -36,9 +36,13 @@
 }
 
 .Cell.START { 
-  background-color: green
+  background-color: rgb(19, 197, 19);
 }
 
 .Cell.END { 
-  background-color: red
+  background-color: rgb(200, 56, 56);
+}
+
+.Cell.BLOCKED { 
+  background-color: rgb(48, 124, 149);
 }

@@ -18,6 +18,7 @@ function App() {
   const [currentPlacement, setCurrentPlacement] = useState(placements.START)
   const [startCell, setStart] = useState()
   const [endCell, setEnd] = useState()
+  const [blockedCells, setBlocked] = useState([])
 
   //useEffect for changing lastClickedCell
   //updates startCell/endCell in the case they are overridden
@@ -30,33 +31,27 @@ function App() {
     switch(currentPlacement){
       //We're trying to place a new START
       case placements.START:
-        if(!startCell){
-          setStart(lastClickedCell)
+        if(startCell){
+          clearState(startCell)
         }
-        else{
-          clearStart()
-          setStart(lastClickedCell)
-        }
+        setStart(lastClickedCell)
         break
       //We're trying to place a new END
       case placements.END:
-        if(!endCell){
-          setEnd(lastClickedCell)
+        if(endCell){
+          clearState(endCell)
         }
-        else{
-          clearEnd()
-          setEnd(lastClickedCell)
-        }
+        setEnd(lastClickedCell)
         break
       //We're clearing or blocking
       default:
         switch(gridData[x][y].state){
           case placements.START:
-            clearStart()
+            clearState(startCell)
             setStart(null)
             break
           case placements.END:
-            clearEnd()
+            clearState(endCell)
             setEnd(null)
             break
           default:
@@ -74,7 +69,7 @@ function App() {
     }
     //Check that start hasn't been set to the end cell
     if(startCell === endCell){
-      clearEnd()
+      clearState(endCell)
       setEnd(null)
     }
     console.log(startCell)
@@ -87,30 +82,20 @@ function App() {
     }
     //Check that end hasn't been set to the start cell
     if(endCell === startCell){
-      clearStart()
+      clearState(startCell)
       setStart(null)
     }
     console.log(endCell)
   },[endCell])
 
-  //Does NOT call setStart(null)
-  function clearStart(){
-    if(!startCell){
-      return
-    }
-    var start_x = parseInt(startCell.charAt(0))
-    var start_y = parseInt(startCell.charAt(1))
-    gridData[start_x][start_y].state = placements.CLEAR
-  }
 
-  //Does NOT call setEnd(null)
-  function clearEnd(){
-    if(!endCell){
+  function clearState(cell){
+    if(!cell){
       return
     }
-    var end_x = parseInt(endCell.charAt(0))
-    var end_y = parseInt(endCell.charAt(1))
-    gridData[end_x][end_y].state = placements.CLEAR
+    var x = parseInt(cell.charAt(0))
+    var y = parseInt(cell.charAt(1))
+    gridData[x][y].state = placements.CLEAR
   }
 
 
