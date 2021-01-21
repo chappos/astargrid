@@ -18,10 +18,10 @@ export default function Grid({gridData, setClicked}) {
                         key = {uuid()}
                         setClicked = {setClicked}
                         state = {gridData[j][i].state}
-                    ></Cell>
+                    />
                 )
             }
-            output.push(<div className="GridRow">{row}</div>)
+            output.push(<div className="GridRow" key={uuid()}>{row}</div>)
         }
         return output
     }

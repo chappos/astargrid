@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+html{
+  background-color: rgb(61, 64, 71);
+}
+
 .Grid {
   position: absolute;
   left: 50%;
@@ -11,18 +15,30 @@
   column-count: 10;
   column-gap: 0px;
   column-gap: none;
-  max-width: 38rem;
+  max-width: 40rem;
 }
 
 .Cell {
   font-size: 1.5rem;
-  padding: 0.8rem;
+  padding: 1.6rem;
   background-color: slategray;
   outline: none;
 }
 
 .Cell:hover {
   background-color: rgba(112,128,144, 0.9)
+}
+
+.Option {
+  background-color: rgb(181, 188, 194);
+  font-size: 1.5rem;
+  margin: 0.2rem;
+  padding: 1rem;
+  border: 0.1rem solid rgb(107, 114, 121);
+}
+
+.Option:hover {
+  background-color: rgb(107, 114, 121);
 }
 
 .OptionBar {

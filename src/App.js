@@ -16,7 +16,7 @@ function App() {
   //Set up useStates
   const [gridData, setGridData] = useState(generateGridData())
   const [lastClickedCell, setClickedCell] = useState()
-  const [currentPlacement, setCurrentPlacement] = useState(placements.START)
+  const [currentPlacement, setCurrentPlacement] = useState()
   const [startCell, setStart] = useState()
   const [endCell, setEnd] = useState()
   const [cellMap, setCellMap] = useState(new Map())
@@ -30,18 +30,20 @@ function App() {
     var y_int = parseInt(lastClickedCell.charAt(1))
     var newMap = cellMap
 
+    //If we are placing a new start or end, clear the previous one
     if(currentPlacement === placements.START || currentPlacement === placements.END){
       for(let [key, value] of newMap){
         if(value.state === currentPlacement){
           value.state = placements.CLEAR
         }
       }
-    }
+    } 
 
-    // We don't want to store CLEAR placements, just remove current entries
+    // We don't want to store CLEAR placements, just remove current entries.
+    // A blank entry will have a state of CLEAR when initialized in the grid.
     if(newMap.has(lastClickedCell)){
       newMap.delete(lastClickedCell)
-    }
+    } 
 
     if(currentPlacement !== placements.CLEAR){ 
       newMap.set(lastClickedCell, {x: x_int, y: y_int, state: currentPlacement})
@@ -56,12 +58,14 @@ function App() {
     }
     if(startCell && endCell){
       var new_result = astarSearch()
-      for(let i = 0; i < new_result.length; i++){
-        if(new_result[i].state === placements.CLEAR){
-          new_result[i].state = placements.SHORTEST
+      if(new_result !== result){
+        for(let i = 0; i < new_result.length; i++){
+          if(new_result[i].state === placements.CLEAR){
+            new_result[i].state = placements.SHORTEST
+          }
         }
+        setResult(new_result)
       }
-      setResult(new_result)
     }
   }, [gridData])
 
@@ -70,15 +74,14 @@ function App() {
     var start = null 
     var end = null
     for(let [key, value] of cellMap){
-      var x_int = key.charAt(0)
-      var y_int = key.charAt(1)
       if(value.state === placements.START){
         start = key
       } else if(value.state === placements.END){
         end = key
       }
-      newGrid[x_int][y_int].state = value.state
+      newGrid[value.x][value.y].state = value.state
     }
+
     setStart(start)
     setEnd(end)
     setGridData(newGrid)
@@ -111,7 +114,6 @@ function App() {
     var start = gridData[startCell.charAt(0)][startCell.charAt(1)]
     var end = gridData[endCell.charAt(0)][endCell.charAt(1)]
 
-    var h = astarH(start, end)
     var open = []
     var closed = []
     open.push(gridData[start.x][start.y])
@@ -141,7 +143,7 @@ function App() {
         var neighbours = getNeighbours(current)
         for(var ii=0; ii < neighbours.length; ii++){
             var neighbour = neighbours[ii]
-            if(closed.includes(neighbour) || neighbour.state == "BLOCKED"){
+            if(closed.includes(neighbour) || neighbour.state === "BLOCKED"){
                 continue
             } else {
                 var gScore = current.g + 1
