@@ -45,10 +45,9 @@ html{
 .OptionBar {
   justify-content: center;
   transform: (0%, 10%);
-  column-count: 4;
-  column-gap: none;
-  display: flex;
+  display: block;
   margin: 0 auto;
+  white-space: nowrap;
 }
 
 .Cell.START { 
