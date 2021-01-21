@@ -9,7 +9,8 @@ function App() {
     START: 'START',
     END: 'END',
     CLEAR: 'CLEAR',
-    BLOCKED: 'BLOCKED'
+    BLOCKED: 'BLOCKED',
+    SHORTEST: 'SHORTEST'
   }
 
   //Set up useStates
@@ -19,6 +20,7 @@ function App() {
   const [startCell, setStart] = useState()
   const [endCell, setEnd] = useState()
   const [cellMap, setCellMap] = useState(new Map())
+  const [result, setResult] = useState(new Map())
 
   useEffect(()=>{
     if(!lastClickedCell){
@@ -48,12 +50,26 @@ function App() {
     updateGrid()
   }, [lastClickedCell])
 
+  useEffect(()=>{
+    if(!gridData){
+      return
+    }
+    if(startCell && endCell){
+      var new_result = astarSearch()
+      for(let i = 0; i < new_result.length; i++){
+        if(new_result[i].state === placements.CLEAR){
+          new_result[i].state = placements.SHORTEST
+        }
+      }
+      setResult(new_result)
+    }
+  }, [gridData])
 
   function updateGrid(){
     var newGrid = generateGridData()
+    var start = null 
+    var end = null
     for(let [key, value] of cellMap){
-      var start = null 
-      var end = null
       var x_int = key.charAt(0)
       var y_int = key.charAt(1)
       if(value.state === placements.START){
@@ -88,6 +104,91 @@ function App() {
     }
     return output
   }
+
+  //A* SEARCH LOGIC
+
+  function astarSearch(){
+    var start = gridData[startCell.charAt(0)][startCell.charAt(1)]
+    var end = gridData[endCell.charAt(0)][endCell.charAt(1)]
+
+    var h = astarH(start, end)
+    var open = []
+    var closed = []
+    open.push(gridData[start.x][start.y])
+    while(open.length > 0){
+        var lowestIndex = 0
+        for(var i=0; i< open.length; i++){
+            if(open[i].f < open[lowestIndex].f){
+                lowestIndex = i
+            }
+        }
+        var current = open[lowestIndex]
+
+        //Found end
+        if(current.x === end.x && current.y === end.y){
+            var curr = current
+            var ret = []
+            while(curr.parent){
+                ret.push(curr)
+                curr = curr.parent
+            }
+            return ret.reverse()
+        }
+
+        //Normal case - close current and process neighbours
+        open.splice(open.indexOf(current), 1)
+        closed.push(current)
+        var neighbours = getNeighbours(current)
+        for(var ii=0; ii < neighbours.length; ii++){
+            var neighbour = neighbours[ii]
+            if(closed.includes(neighbour) || neighbour.state == "BLOCKED"){
+                continue
+            } else {
+                var gScore = current.g + 1
+                var gScoreIsBest = false
+
+                if(!open.includes(neighbour)){
+                    gScoreIsBest = true
+                    neighbour.h = astarH([neighbour.x, neighbour.y], end)
+                    open.push(neighbour)
+                }
+                else if(gScore < neighbour.g){
+                    gScoreIsBest = true;
+                }
+
+                if(gScoreIsBest){
+                    neighbour.parent = current
+                    neighbour.g = gScore
+                    neighbour.f = neighbour.g + neighbour.h 
+                }
+            }
+        } 
+    }
+    return [];
+}
+
+function astarH(current, goal){
+    return (Math.abs(current.x - goal.x) + Math.abs(current.y - goal.y))
+}
+function getNeighbours(current){
+    var output = []
+    var x = current.x
+    var y = current.y
+
+    if(gridData[x-1] && gridData[x-1][y]){
+        output.push(gridData[x-1][y])
+    }
+    if(gridData[x+1] && gridData[x+1][y]){
+        output.push(gridData[x+1][y])
+    }
+    if(gridData[x][y-1]){
+        output.push(gridData[x][y-1])
+    }
+    if(gridData[x][y+1]){
+        output.push(gridData[x][y+1])
+    }
+    return output
+}
 
   return (
     <div className="App">

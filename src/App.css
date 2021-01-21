@@ -46,3 +46,7 @@
 .Cell.BLOCKED { 
   background-color: rgb(48, 124, 149);
 }
+
+.Cell.SHORTEST {
+  background-color: purple;
+}
