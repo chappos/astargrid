@@ -9,6 +9,7 @@ html{
 
 .Grid {
   transform: translate(0%, 10%);
+  margin: 0 auto;
   display: inline-block;
   column-count: 10;
   column-gap: 0px;
@@ -46,7 +47,8 @@ html{
   transform: (0%, 10%);
   column-count: 4;
   column-gap: none;
-  display: flex
+  display: flex;
+  margin: 0 auto;
 }
 
 .Cell.START { 
