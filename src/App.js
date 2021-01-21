@@ -18,86 +18,55 @@ function App() {
   const [currentPlacement, setCurrentPlacement] = useState(placements.START)
   const [startCell, setStart] = useState()
   const [endCell, setEnd] = useState()
-  const [blockedCells, setBlocked] = useState([])
+  const [cellMap, setCellMap] = useState(new Map())
 
-  //useEffect for changing lastClickedCell
-  //updates startCell/endCell in the case they are overridden
   useEffect(()=>{
     if(!lastClickedCell){
       return
     }
-    var x = parseInt(lastClickedCell.charAt(0))
-    var y = parseInt(lastClickedCell.charAt(1))
-    switch(currentPlacement){
-      //We're trying to place a new START
-      case placements.START:
-        if(startCell){
-          clearState(startCell)
+    var x_int = parseInt(lastClickedCell.charAt(0))
+    var y_int = parseInt(lastClickedCell.charAt(1))
+    var newMap = cellMap
+
+    if(currentPlacement === placements.START || currentPlacement === placements.END){
+      for(let [key, value] of newMap){
+        if(value.state === currentPlacement){
+          value.state = placements.CLEAR
         }
-        setStart(lastClickedCell)
-        break
-      //We're trying to place a new END
-      case placements.END:
-        if(endCell){
-          clearState(endCell)
-        }
-        setEnd(lastClickedCell)
-        break
-      //We're clearing or blocking
-      default:
-        switch(gridData[x][y].state){
-          case placements.START:
-            clearState(startCell)
-            setStart(null)
-            break
-          case placements.END:
-            clearState(endCell)
-            setEnd(null)
-            break
-          default:
-            break
-        }
-        break
+      }
     }
-    gridData[x][y].state = currentPlacement
+
+    // We don't want to store CLEAR placements, just remove current entries
+    if(newMap.has(lastClickedCell)){
+      newMap.delete(lastClickedCell)
+    }
+
+    if(currentPlacement !== placements.CLEAR){ 
+      newMap.set(lastClickedCell, {x: x_int, y: y_int, state: currentPlacement})
+    }
+    setCellMap(newMap)
+    updateGrid()
   }, [lastClickedCell])
 
-  //useEffect for startCell
-  useEffect(()=>{
-    if(!startCell){
-      return
-    }
-    //Check that start hasn't been set to the end cell
-    if(startCell === endCell){
-      clearState(endCell)
-      setEnd(null)
-    }
-    console.log(startCell)
-  }, [startCell])
 
-  //useEffect for endCell
-  useEffect(()=>{
-    if(!endCell){
-      return
+  function updateGrid(){
+    var newGrid = generateGridData()
+    for(let [key, value] of cellMap){
+      var start = null 
+      var end = null
+      var x_int = key.charAt(0)
+      var y_int = key.charAt(1)
+      if(value.state === placements.START){
+        start = key
+      } else if(value.state === placements.END){
+        end = key
+      }
+      newGrid[x_int][y_int].state = value.state
     }
-    //Check that end hasn't been set to the start cell
-    if(endCell === startCell){
-      clearState(startCell)
-      setStart(null)
-    }
-    console.log(endCell)
-  },[endCell])
-
-
-  function clearState(cell){
-    if(!cell){
-      return
-    }
-    var x = parseInt(cell.charAt(0))
-    var y = parseInt(cell.charAt(1))
-    gridData[x][y].state = placements.CLEAR
+    setStart(start)
+    setEnd(end)
+    setGridData(newGrid)
   }
-
 
   //Generates a "blank" grid dataset
   function generateGridData(){
