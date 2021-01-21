@@ -1,68 +1,66 @@
 .App {
   text-align: center;
+  justify-content: center;
 }
 
 html{
-  background-color: rgb(61, 64, 71);
+  background-color: rgb(77, 77, 88);
 }
 
 .Grid {
-  position: absolute;
-  left: 50%;
-  top: 60%;
-  transform: translate(-50%, -60%);
+  transform: translate(0%, 10%);
   display: inline-block;
   column-count: 10;
   column-gap: 0px;
   column-gap: none;
-  max-width: 40rem;
+  max-width: 39rem;
 }
 
 .Cell {
   font-size: 1.5rem;
-  padding: 1.6rem;
-  background-color: slategray;
+  padding: 2rem;
+  background-color: aliceblue;
   outline: none;
+  border: 1px solid black
 }
 
 .Cell:hover {
-  background-color: rgba(112,128,144, 0.9)
+  background-color: rgba(228, 239, 250, 0.9)
 }
 
 .Option {
-  background-color: rgb(181, 188, 194);
+  background-color: aliceblue;
+  min-width: 8.25rem;
   font-size: 1.5rem;
-  margin: 0.2rem;
+  margin: 4rem 0.8rem 0rem 0.8rem;
   padding: 1rem;
-  border: 0.1rem solid rgb(107, 114, 121);
+  border: 0.1rem solid rgb(218, 221, 223);
 }
 
 .Option:hover {
-  background-color: rgb(107, 114, 121);
+  background-color: rgba(228, 239, 250, 0.9);
 }
 
 .OptionBar {
-  position: absolute;
-  left: 50%;
-  top: 15%;
-  transform: translate(-50%, -15%);
+  justify-content: center;
+  transform: (0%, 10%);
   column-count: 4;
   column-gap: none;
   display: flex
 }
 
 .Cell.START { 
-  background-color: rgb(19, 197, 19);
+  background-color: rgb(35, 192, 35);
 }
 
 .Cell.END { 
-  background-color: rgb(200, 56, 56);
+  background-color: rgb(202, 70, 70);
 }
 
 .Cell.BLOCKED { 
-  background-color: rgb(48, 124, 149);
+  background-color: rgb(29, 125, 156);
 }
 
 .Cell.SHORTEST {
-  background-color: purple;
+  background-color: rgb(123, 217, 230);
 }
