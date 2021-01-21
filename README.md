@@ -1,4 +1,4 @@
-## A* Search Algorithm powered by React
+# A* Search Algorithm powered by React
 
-# Try the live version here:
+## Try the live version here:
 https://main.d3jrqpfsqp9xwa.amplifyapp.com/
